@@ -7,6 +7,7 @@ import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.NoResultException;
 import java.util.List;
 
 @Component
@@ -31,12 +32,19 @@ public class ClientDAO {
     }
 
     public Client getClientByPhoneOrFullnameOrPassport(String phone, String fullname, String passport){
-        return this.hibernateConfig.getMysqlSession()
+        Client client = null;
+        try {
+        client = this.hibernateConfig.getMysqlSession()
                 .createQuery("select c from Client c where c.phone=:param1 and c.fullname=:param2 and c.passport=:param3",Client.class)
                 .setParameter("param1",phone)
                 .setParameter("param2",fullname)
                 .setParameter("param3",passport)
                 .getSingleResult();
+        return client;
+        }
+        catch(NoResultException nre){
+            return null;
+        }
     }
 
 

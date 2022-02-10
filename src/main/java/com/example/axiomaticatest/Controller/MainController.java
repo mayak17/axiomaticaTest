@@ -33,7 +33,11 @@ public class MainController {
     public ResponseEntity<Client> searchClient(@RequestParam(required = false) String phone,
                                                    @RequestParam(required = false) String fullname,
                                                    @RequestParam(required = false) String passport){
-        return ResponseEntity.ok(this.clientService.searchClient(phone,fullname,passport));
+        Client client = this.clientService.searchClient(phone,fullname,passport);
+        if(client!= null)
+            return ResponseEntity.ok(client);
+        else
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/all-clients")
