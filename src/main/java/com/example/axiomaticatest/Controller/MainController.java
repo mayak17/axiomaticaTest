@@ -57,8 +57,13 @@ public class MainController {
     }
     @PostMapping("/create-loan-contract")
     public ResponseEntity<LoanContractDTO> createLoanContract(@RequestParam Long applicationId){
-        LoanContractDTO loanContract = this.loanContractService.createLoanContractDTO(applicationId);
-        return new ResponseEntity(loanContract,HttpStatus.CREATED);
+        try {
+            LoanContractDTO loanContract = this.loanContractService.createLoanContractDTO(applicationId);
+            return new ResponseEntity(loanContract, HttpStatus.CREATED);
+        }
+        catch(HibernateException e){
+            return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        }
     }
     @PostMapping("/update-loan-contract")
     public ResponseEntity updateLoanContract(@RequestParam Long loanContractId,
